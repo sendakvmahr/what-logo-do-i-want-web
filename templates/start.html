@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Selecting logos</h1>
+
+<p>Choose the logo that's the most similar to what you want.</p>
+<div id="img-container">
+	<img src="{{ url_for('static',filename=logo1.filename) }}" data-coord="{{ logo1.coord }}"/>
+	<img src="{{ url_for('static',filename=logo2.filename) }}" data-coord="{{ logo2.coord }}"/>
+	<img src="{{ url_for('static',filename=logo3.filename) }}" data-coord="{{ logo3.coord }}"/>
+	<img src="{{ url_for('static',filename=logo4.filename) }}" data-coord="{{ logo4.coord }}"/>
+</div>
+on image click, go to 
+#/process?count=num_logo_suggested&coords=[1,2,3,4,5,6]
+
+
+coords is calculated in frontend js
+html request is sent back, rerender and refresh front page
+
+{% if count == 0%}
+	<br/>
+	awerwaera
+	<script src="{{ url_for('static',filename='js/process.js') }}"></script>
+{% endif %}
+{% endblock %}

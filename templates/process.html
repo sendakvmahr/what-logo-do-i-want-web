@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Process</h1>
+<h1 style="color: red">WHEN YOU'RE ON WINDOWS COPY PASTE THIS WITH HTML FORMATTING</h1>
+<h2> Table of Contents</h2>
+<ul>
+	<li><a href="#data_collection">Data Collection</a></li>
+</ul>
+<h3 id="data_collection">Data collection</h3>
+	<p>The first step was to find or build a dataset of logos. A quick look on did not show any datasets of all industries, so Wikipedia was used to build a list. </p>
+
+There were four pages used to get listings of teams and brands with logos. 
+Lists of brands
+    List of sports teams
+    List of Esports teams
+    Lists of companies
+
+A web scraper was used to fetch lists of links and remove duplicate links. The first image on each article was downloaded and saved under a general category folder with the name of the page the image was pulled from. Images that were not logos or duplicates of logos were deleted manually.
+
+An additional dataset using demoscene logos was pulled from kaggle (link to dataset)
+
+Data Processing
+Logo categories simplified from their Wikipedia categories into 19 categories: 
+Adult
+Alcohol
+Convenience Store
+Demoscene
+Dental/Pharmaceutical
+Electronics
+Esports
+Food/Drink
+Gaming
+Gas
+Media/Communications
+Misc
+Money
+Restaurant
+Software
+Sports
+Sports Clothing and Clothing
+Stores
+Utilities
+
+Smallest categories were the first to be merged into larger categories. 
+
+Next, each logo was resized into 128x128 pngs to standardize them. The background color of each logo was determined by an algorithm that looked at the percentage of each color in the image and the color of edge pixels to fill extra space with an appropriate color. 
+
+After the initial resizing, 16x16 images were made of all the logos. All of the smallest images have the logo in black and the background in white, as a way of focusing on the shape of the logo. 
+
+Lastly, an input csv was made with the following columns:
+category
+    Taken from the folder the logo was sorted into
+name
+    Name of the image/Wikipedia page the logo was from. 
+profile
+    Portrait, landscape, or square - determined by image dimensions of the original images.
+number of colors
+variance r
+variance g
+variance b
+variance a
+	Variance and number of colors help define logo styles. A simple, flat vector logo will have very few colors. Logos utilizing simple gradients or shading will generally a high color count, but will generally only have a high variance in R, G, B, or A. Monochromatic grey and black logos will have an equal R, G, and B variance.  
+background color r
+background color g
+background color b
+background color a
+	Determined by algorithm.
+primary color r
+primary color g
+primary color b
+primary color a
+secondary color r
+secondary color g
+secondary color b
+secondary color a
+tertiary color r
+tertiary color g
+tertiary color b
+tertiary color a
+	Primary, tertiary, and secondary colors are calculated by 
+percent_bg
+	Information about shape. 
+percent color1
+percent color2
+percent color3
+	Percentage the primary, secondary, and tertiary colors make up in the logo.
+imagedata_0... imagedata_255
+	0 or 1 input of the smallest version of the logo. Meant as a simple shape categorization. 
+
+Training
+	This was a lot of messing around and basically, lots of multiplying differences then standardizing them. Basically, once I put the imagedata in as a factor, it started thinking shape was REALLY important due to the number of variables. Wouldn't have had the slightest idea of how to make a convolutional net to isolate the features. But if I multiply the features that are more important, that ought to work right? And it did in the end. 
+	65 clusters 
+	category, 
+    #"percent_bg",
+    #"percent color1",
+    #"percent color2",
+    #"percent color3",
+    were dropped in the end. 
+
+Looking back, things I would have done differently: 
+	ratio instead of landscape, width, height, etc. Right now, due to the sheer number of inputs used to define "shape" it's kind of... weighed way more than everything else if I don't balance it out. Completely aware that "Red Square" and "Red Rectangle" ought be similar than red square and blue square, but that's not doing so well
+
+	basicy tree, using whole image, for something like square/oval/circle with lots of generated data
+
+	Difficulty with most image processing right now, a lot of the information looks like it's not so much for clustering - it's something you can optimize if you know the right answer. And what's more impotant for me, is that this is a pretty decent grouping. 
+
+
+	Is there text or not? - 
+		Font style if there is - incorporated into logo, serif/sans-serif/cursive
+		text-shadow
+		caps or no caps
+		proporiton of letters and kerning
+	round, square, text, irregular instead of images
+	More logos that aren't blue text lines, and take out some blue lines of text logos. It's ridiculous how many there are - out of 65 clusters, they make up 3 fat clusters just by themselves. Is it a decent representation of what is out in the real world? Yes. Is it something people generally request of logo designers? No.
+
+	average Line Width. This is something huge, stylistically, like font, but  
+
+
+
+
+{% endblock %}

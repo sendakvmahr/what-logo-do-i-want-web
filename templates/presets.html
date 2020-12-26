@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+
+	<div>
+		<input type="text" maxlength="100" placeholder="optional: search for a similar logo"/>
+	</div>
+	<img style="width: 100px; height: 100px;" src=""/>
+<hr>
+
+<input type="text" maxlength="100" placeholder="optional: enter a hex main color, or leave blank"/>
+<hr>
+
+<a href="{{ url_for('start') }}">Start</a>
+
+{% endblock %}
