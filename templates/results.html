@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Results</h1>
+
+You are done
+These are the most similar images:
+<hr>
+{% for logo in closest_logos %}
+	<img src="{{ url_for('static',filename=logo) }}"/>
+{% endfor%}
+<hr>
+
+Other similar but less simliar images:
+<hr>
+
+{% for logo in cluster_logos %}
+	<img src="{{ url_for('static',filename=logo) }}"/>
+{% endfor%}
+
+logo coord = {{coord}}
+{% endblock %}

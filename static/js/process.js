@@ -28,13 +28,22 @@ function loadNewImages(img) {
 
 function recordClickValue(img) {
 	let coord = JSON.parse("[" + img.attributes["data-coord"].value + "]");
+	avgCoord = coord;
 	count += 1;
-
 	// append to coords, find new coords
+}
+
+function goToResult() {
+	let finalURL = "/results?coord=" + avgCoord.toString()
+	window.location.href = finalURL;
 }
 
 function imageClicked(e){
 	recordClickValue(e.target);
+	console.log(count);
+	if (count == 10) {
+		goToResult();
+	}
 	loadNewImages(e.target);
 	imgsSetOnclick();
 }

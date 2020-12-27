@@ -18,34 +18,60 @@ def strip_list(l):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+	return render_template("index.html")
 
 @app.route("/presets")
 def presets():
-    return render_template("presets.html")
+	return render_template("presets.html")
 
 @app.route("/process")
 def process():
-    return render_template("process.html")
+	return render_template("process.html")
+
+@app.route("/results")
+def results():
+	final_average = request.args.get('coord').split(",")
+	closest_logos = [
+		"logo_images/food_drink/hp_hood.webp",
+		"logo_images/food_drink/vitasoy.webp",
+		"logo_images/convenience_store/kum_&_go.webp"
+	]
+	cluster_logos = [
+		"logo_images/food_drink/cielo_(water).webp",
+		"logo_images/food_drink/dolly_madison.webp",
+		"logo_images/food_drink/streit's.webp",
+		"logo_images/food_drink/ginsters.webp",
+		"logo_images/food_drink/goetze's_candy_company.webp",
+		"logo_images/food_drink/rich_products.webp",
+		"logo_images/food_drink/fresh_del_monte_produce.webp",
+		"logo_images/food_drink/bambi_(company).webp"
+	]
+	return render_template("results.html",	
+		closest_logos=closest_logos,
+		cluster_logos=cluster_logos,
+		coord=final_average
+		)
+
+
 
 @app.route("/start")
 def start():
 	return render_template(
-	    'start.html',
-	    count=0,
-	    logo1={
+		'start.html',
+		count=0,
+		logo1={
 			"filename": random.choice(logos),
 			"coord": strip_list([1, 2, 3, 4, 6, 87, 9, 84])
 		},
-	    logo2={
+		logo2={
 			"filename": random.choice(logos),
 			"coord": strip_list([1, 2, 3, 4, 6, 87, 9, 84])
 		},
-	    logo3={
+		logo3={
 			"filename": random.choice(logos),
 			"coord": strip_list([1, 2, 3, 4, 6, 87, 9, 84])
 		},
-	    logo4={
+		logo4={
 			"filename": random.choice(logos),
 			"coord": strip_list([1, 2, 3, 4, 6, 87, 9, 84])
 		},
@@ -56,19 +82,19 @@ def get_images():
 	count = request.args.get('count')
 	coord = request.args.get('coord').split(",")
 	return jsonify({
-		    "logo1":{
+			"logo1":{
 				"filename": random.choice(logos),
 				"coord": [1, 2, 3, 4, 6, 87, 9, 84]
 			},
-		    "logo2":{
+			"logo2":{
 				"filename": random.choice(logos),
 				"coord": [1, 2, 3, 4, 6, 87, 9, 84]
 			},
-		    "logo3":{
+			"logo3":{
 				"filename": random.choice(logos),
 				"coord": [1, 2, 3, 4, 6, 87, 9, 84]
 			},
-		    "logo4":{
+			"logo4":{
 				"filename": random.choice(logos),
 				"coord": [1, 2, 3, 4, 6, 87, 9, 84]
 			}
