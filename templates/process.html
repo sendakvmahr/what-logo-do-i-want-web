@@ -97,6 +97,8 @@ Training
     #"percent color3",
     were dropped in the end. 
 
+
+
 Looking back, things I would have done differently: 
 	ratio instead of landscape, width, height, etc. Right now, due to the sheer number of inputs used to define "shape" it's kind of... weighed way more than everything else if I don't balance it out. Completely aware that "Red Square" and "Red Rectangle" ought be similar than red square and blue square, but that's not doing so well
 
@@ -116,6 +118,19 @@ Looking back, things I would have done differently:
 	average Line Width. This is something huge, stylistically, like font, but  
 
 
+Future:
+Smarter dataset. Like it's nice that 9000000 blue logos is represenative 
+of what most logos look like, but that's shit for brainstorming
 
+importance diagram
+
+Select only "representative" logos for selection
+
+Map shape using a trained net, then use that as an input
+
+If someone gets presented with all blue logos, that's not going to be helpful. 
+Should find the most unique/represenative logos -
+subset of logos whose coordinates are most distant from any other logo in the dataset, 
+and show examples from those
 
 {% endblock %}

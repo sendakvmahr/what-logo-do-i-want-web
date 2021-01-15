@@ -36,7 +36,7 @@ function recordClickValue(img) {
 }
 
 function goToResult() {
-	let requestFinalURL = "/get_final_url?coord=" + avgCoord.toString();
+	let requestFinalURL = "/get_final_url?ids=" + ids.toString();
 	let finalURL = httpGet(requestFinalURL)
 	window.location.href = finalURL;
 }

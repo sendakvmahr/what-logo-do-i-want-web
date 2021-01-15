@@ -1,5 +1,6 @@
 import numpy as np
 import pickle
+from numpy.linalg import norm
 from sklearn.cluster import KMeans
 # This whole module should be more communicating with a database 
 # but I don't think a database is part of the payment
@@ -26,6 +27,17 @@ def load_ids():
 			ids[id_] = (fields[2].strip(), fields[1].strip())
 			by_cluster[int(fields[3])].append(id_)
 		return ids, by_cluster
+
+def closest_logos(coord, num_closest):
+	cluster_id = predict_coord(coord)
+	distances = []
+	for id_ in CLUSTERS[cluster_id]:
+		distances.append([norm(coord-DATA[id_]), id_])
+	distances.sort(key=(lambda x: x[0]))
+	return [x[1] for x in distances[:num_closest]]
+
+def id_to_cluster(i):
+	return predict_coord(DATA[i])
 
 # More for reference than for use
 def predict(data_i):

@@ -3,7 +3,15 @@
 <h1>Results</h1>
 
 You are done
+<hr>
 cluster = {{ cluster_id }}
+<hr>
+This is what you chose:<br/>
+{% for logo in chosen_logos %}
+	<img src="{{ url_for('static',filename=logo) }}"/>
+{% endfor%}
+<hr>
+
 These are the most similar images:
 <hr>
 {% for logo in closest_logos %}
