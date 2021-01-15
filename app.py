@@ -7,9 +7,11 @@ import clustering.cluster as cluster
 
 #reminder for me to remove them
 exclude_list = [
-1176	# teamviewer
+1176,	# teamviewer
+6536    #merrell_(company)
 ]
-
+num_logos_show = 20
+num_closest_logos = 5
 app = Flask(__name__)
 #CORS(app)
 
@@ -33,6 +35,17 @@ def random_logo(exclude=[]):
 		"coord": strip_list(cluster.get_logo_arguments(logo_id)),
 		"id": logo_id
 	}
+def average_id_coords(ids):
+	ids = [cluster.DATA[i] for i in ids]
+	result = []
+	rows = len(ids)
+	columns = len(ids[0])
+	for y in range(columns):
+		total = 0
+		for x in range(rows):
+			total += ids[x][y]
+		result.append(total/rows)
+	return result
 
 def random_logos(n, exclude=[]):
 	"""Selects multiple logos without dupelications and with exclusions """
@@ -68,18 +81,26 @@ def process():
 @app.route("/get_final_url")
 def get_final_url():
 	"""Dumping the coordinate in the url is too fat"""
-	final_average = request.args.get('coord').split(",")
-	final_average = [float(i) for i in final_average]
-	cluster_id = cluster.predict_coord(final_average)
-	return ("/results?cluster={}".format(cluster_id))
+	ids = request.args.get('ids').split(",")
+	ids = [int(i) for i in ids]
+	clusters = [cluster.id_to_cluster(i) for i in ids]
+	final_cluster = -1
+	for id_ in clusters:
+		if clusters.count(id_) >= 3:
+			clusters = id_
+	if final_cluster == -1:
+		final_average = average_id_coords(ids)
+		final_cluster = cluster.predict_coord(final_average)
+	closest_logos = cluster.closest_logos(final_average, 3)
+	return "/results?cluster={}&id={}".format(final_cluster, strip_list(closest_logos))
 
 # TODO - descriptions of each cluster, parse ids of the 3 closest logos in url
 @app.route("/results")
 def results():
 	cluster_id = int(request.args.get('cluster'))
-	images = load_cluster_images(cluster_id)
-	closest_logos = images[:3]
-	cluster_logos = images[3:]
+	closest_logos = request.args.get('id').split(",")
+	closest_logos = [logo_id_to_image(int(i)) for i in closest_logos]
+	cluster_logos = load_cluster_images(cluster_id)
 	return render_template("results.html",	
 		closest_logos=closest_logos,
 		cluster_logos=cluster_logos,
@@ -88,7 +109,7 @@ def results():
 
 @app.route("/start")
 def start():
-	logos = random_logos(6) 
+	logos = random_logos(num_logos_show) 
 	return render_template(
 		'start.html',
 		count=0,
@@ -102,5 +123,5 @@ def get_images():
 	# if num f ids > some number, start doing half random, half closest
 	exclude = [int(x) for x in exclude]
 	count = len(exclude)
-	logos = random_logos(6, exclude)
+	logos = random_logos(num_logos_show, exclude)
 	return jsonify(logos)
