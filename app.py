@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask import render_template
 import random
+import clustering.cluster as clust
 #from flask_cors import CORS
 #
 
@@ -29,6 +30,7 @@ def presets():
 def process():
 	return render_template("process.html")
 
+# do last
 @app.route("/results")
 def results():
 	final_average = request.args.get('coord').split(",")
@@ -54,53 +56,41 @@ def results():
 		)
 
 
+def logo_id_to_image(logo_id):
+	category, name = clust.IDS[logo_id]
+	return "logo_images/{}/{}.webp".format(category, name)
+
+def random_logo(exclude=[]):
+	logo_id = random.randint(0, clust.NUM_LOGOS)
+	return {
+		"filename": logo_id_to_image(logo_id),
+		"coord": strip_list(clust.get_logo_arguments(logo_id))
+	}
 
 @app.route("/start")
 def start():
+	# need to make sure logos are not duplicated
 	return render_template(
 		'start.html',
 		count=0,
-		logo1={
-			"filename": random.choice(logos),
-			"coord": strip_list([1, 2, 3, 4, 6, 87, 9, 84])
-		},
-		logo2={
-			"filename": random.choice(logos),
-			"coord": strip_list([1, 2, 3, 4, 6, 87, 9, 84])
-		},
-		logo3={
-			"filename": random.choice(logos),
-			"coord": strip_list([1, 2, 3, 4, 6, 87, 9, 84])
-		},
-		logo4={
-			"filename": random.choice(logos),
-			"coord": strip_list([1, 2, 3, 4, 6, 87, 9, 84])
-		},
+		logo1=random_logo(),
+		logo2=random_logo(),
+		logo3=random_logo(),
+		logo4=random_logo(),
 	)
 
+#do after start
 @app.route("/new_images")
 def get_images():
 	count = request.args.get('count')
 	coord = request.args.get('coord').split(",")
 	return jsonify({
-			"logo1":{
-				"filename": random.choice(logos),
-				"coord": [1, 2, 3, 4, 6, 87, 9, 84]
-			},
-			"logo2":{
-				"filename": random.choice(logos),
-				"coord": [1, 2, 3, 4, 6, 87, 9, 84]
-			},
-			"logo3":{
-				"filename": random.choice(logos),
-				"coord": [1, 2, 3, 4, 6, 87, 9, 84]
-			},
-			"logo4":{
-				"filename": random.choice(logos),
-				"coord": [1, 2, 3, 4, 6, 87, 9, 84]
-			}
+			"logo1": random_logo(),
+			"logo2": random_logo(),
+			"logo3": random_logo(),
+			"logo4": random_logo()
 		})
-
+# w
 #localhost:5000/get_logo?logo=wertizoo
 @app.route("/get_logo", methods = ['GET'])
 def get_logo():
