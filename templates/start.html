@@ -4,21 +4,9 @@
 
 <p>Choose the logo that's the most similar to what you want.</p>
 <div id="img-container">
-	<img src="{{ url_for('static',filename=logo1.filename) }}" data-coord="{{ logo1.coord }}" data-id="{{ logo1.id }}"/>
-	<img src="{{ url_for('static',filename=logo2.filename) }}" data-coord="{{ logo2.coord }}" data-id="{{ logo2.id }}"/>
-	<img src="{{ url_for('static',filename=logo3.filename) }}" data-coord="{{ logo3.coord }}" data-id="{{ logo3.id }}"/>
-	<img src="{{ url_for('static',filename=logo4.filename) }}" data-coord="{{ logo4.coord }}" data-id="{{ logo4.id }}"/>
+	{% for l in logos %}
+	<img src="{{ url_for('static',filename=l.filename) }}" data-coord="{{ l.coord }}" data-id="{{ l.id }}"/>
+	{% endfor %}
 </div>
-on image click, go to 
-#/process?count=num_logo_suggested&coords=[1,2,3,4,5,6]
-
-
-coords is calculated in frontend js
-html request is sent back, rerender and refresh front page
-
-{% if count == 0%}
-	<br/>
-	awerwaera
 	<script src="{{ url_for('static',filename='js/process.js') }}"></script>
-{% endif %}
 {% endblock %}

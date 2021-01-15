@@ -16,14 +16,14 @@ function imgsSetOnclick() {
 function loadNewImages(img) {
 	let newImgs = JSON.parse(httpGet("/new_images?ids=" + ids.toString()))
 	let container = document.getElementById("img-container")
-	container.innerHTML = ""
-	for (let j = 1; j < 5; j++) {
-		let key = "logo" + j;
-		let node = document.createElement("img")
-		node.src = "static/" + newImgs[key].filename;
-		node.setAttribute("data-coord", newImgs[key].coord.toString())
-		node.setAttribute("data-id", newImgs[key].id.toString())
-		container.appendChild(node)
+	container.innerHTML = "";
+	for (let j = 0; j < newImgs.length; j++) {
+		let image = newImgs[j];
+		let node = document.createElement("img");
+		node.src = "static/" + image.filename;
+		node.setAttribute("data-coord", image.coord.toString());
+		node.setAttribute("data-id", image.id.toString());
+		container.appendChild(node);
 	}
 }
 

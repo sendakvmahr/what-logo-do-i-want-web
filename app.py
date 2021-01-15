@@ -21,9 +21,7 @@ def logo_id_to_image(logo_id):
 	return "logo_images/{}/{}.webp".format(category, name)
 
 def random_logo(exclude=[]):
-	"""
-	Selects a random logo, excludes some
-	"""
+	"""Selects a random logo, excludes some"""
 	if -1 not in exclude:
 		exclude.append(-1)
 	exclude += exclude_list
@@ -37,9 +35,7 @@ def random_logo(exclude=[]):
 	}
 
 def random_logos(n, exclude=[]):
-	"""
-	Makes sure a duplicate doesn't appear in when selecting more than one logo 
-	"""
+	"""Selects multiple logos without dupelications and with exclusions """
 	result = []
 	for i in range(n):
 		logo = random_logo(exclude)
@@ -48,6 +44,7 @@ def random_logos(n, exclude=[]):
 	return result
 
 def load_cluster_images(cluster_id):
+	"""Given cluster ID, returns the images of logos in that cluster"""
 	ids_ = cluster.CLUSTERS[cluster_id]
 	result = []
 	for i in ids_:
@@ -58,6 +55,7 @@ def load_cluster_images(cluster_id):
 def index():
 	return render_template("index.html")
 
+#unused atm, may not be doable unless I dump the whole pipeline in the backend
 @app.route("/presets")
 def presets():
 	return render_template("presets.html")
@@ -66,14 +64,16 @@ def presets():
 def process():
 	return render_template("process.html")
 
+# TODO - include IDs of the 3 closest logos in the url
 @app.route("/get_final_url")
 def get_final_url():
+	"""Dumping the coordinate in the url is too fat"""
 	final_average = request.args.get('coord').split(",")
 	final_average = [float(i) for i in final_average]
 	cluster_id = cluster.predict_coord(final_average)
 	return ("/results?cluster={}".format(cluster_id))
 
-# do last
+# TODO - descriptions of each cluster, parse ids of the 3 closest logos in url
 @app.route("/results")
 def results():
 	cluster_id = int(request.args.get('cluster'))
@@ -88,37 +88,19 @@ def results():
 
 @app.route("/start")
 def start():
-	logos = random_logos(4) 
+	logos = random_logos(6) 
 	return render_template(
 		'start.html',
 		count=0,
-		logo1=logos[0],
-		logo2=logos[1],
-		logo3=logos[2],
-		logo4=logos[3],
+		logos=logos
 	)
 
-#do after start
-# exclude should be counted too
+# TODO - smarter guesses on which logos should go next after 
 @app.route("/new_images") 
 def get_images():
 	exclude = request.args.get('ids').split(",")
+	# if num f ids > some number, start doing half random, half closest
 	exclude = [int(x) for x in exclude]
-	#count = request.args.get('count')
-	#coord = request.args.get('coord').split(",")
-	logos = random_logos(4, exclude)
-	return jsonify({
-			"logo1": logos[0],
-			"logo2": logos[1],
-			"logo3": logos[2],
-			"logo4": logos[3]
-		})
-"""
-# more for ref than for actual use
-#localhost:5000/get_logo?logo=wertizoo
-@app.route("/get_logo", methods = ['GET'])
-def get_logo():
-	logo_name = request.args.get('logo')
-	logo_id = str(30 * len(logo_name))
-	return logo_id + " " + request.args.get('nopo')
-"""
+	count = len(exclude)
+	logos = random_logos(6, exclude)
+	return jsonify(logos)
