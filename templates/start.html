@@ -3,10 +3,11 @@
 <h1>Selecting logos</h1>
 
 <p>Choose the logo that's the most similar to what you want.</p>
-<div id="img-container">
+<div id="img-container" class="img-container fade-in">
 	{% for l in logos %}
 	<img src="{{ url_for('static',filename=l.filename) }}" data-coord="{{ l.coord }}" data-id="{{ l.id }}"/>
 	{% endfor %}
 </div>
+	<div id="loader" class="fade-out">LOADING....</div>
 	<script src="{{ url_for('static',filename='js/process.js') }}"></script>
 {% endblock %}

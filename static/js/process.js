@@ -13,7 +13,32 @@ function imgsSetOnclick() {
 	}
 }
 
+function showLoader() {
+	
+	let loader = document.getElementById("loader")
+	loader.classList.toggle("fade-in");
+	loader.classList.toggle("fade-out");
+
+	let container = document.getElementById("img-container");
+	container.style.height = container.clientHeight + "px";
+	container.classList.toggle("fade-out");
+	container.classList.toggle("fade-in");
+}
+
+function hideLoader() {
+	let loader = document.getElementById("loader")
+	loader.classList.toggle("fade-out");
+	loader.classList.toggle("fade-in");
+
+	let container = document.getElementById("img-container");
+	container.style.height = container.clientHeight + "px";
+	container.classList.toggle("fade-in");
+	container.classList.toggle("fade-out");
+}
+
 function loadNewImages(img) {
+	showLoader();
+	
 	let newImgs = JSON.parse(httpGet("/new_images?ids=" + ids.toString()))
 	let container = document.getElementById("img-container")
 	container.innerHTML = "";
@@ -25,6 +50,8 @@ function loadNewImages(img) {
 		node.setAttribute("data-id", image.id.toString());
 		container.appendChild(node);
 	}
+	
+	hideLoader();
 }
 
 function recordClickValue(img) {

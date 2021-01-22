@@ -1,12 +1,20 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Index</h1>
-<p>Hello, this webpage does a thing. </p>
+<h1>What logo do I want?</h1>
+<p>
+	This is *AI driven* webpage to help people determine a direction for their logos.
+</p>
+<p>
+	Choose some logos that most closely resemble the style you want. 
+</p>
+<p>
+	It will help you generate a stylesheet to hand to a logo designer!
+</p>
 <!-- 
 <a href="{{ url_for('presets') }}">Select Presets</a>
 <br/>
 -->
-<a href="{{ url_for('start') }}">Start</a>
+<a class="button" href="{{ url_for('start') }}">Start</a>
 
 
 {% endblock %}

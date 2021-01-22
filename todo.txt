@@ -1,0 +1,10 @@
+
+# TODO - smarter guesses on which logos should go next after X gueses. or only 
+# if there's enough unity among the things start narrowing it down
+
+
+# TODO - descriptions of each cluster
+# todo  - progress bar on clicking
+
+#rate how much unity there is, tell ppl if they dunno what they want
+

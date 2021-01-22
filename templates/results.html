@@ -1,30 +1,37 @@
 {% extends "layout.html" %}
 {% block content %}
 <h1>Results</h1>
+<p>
+	Your logo is in group <b>{{ cluster_id }}</b>. That means [some description, I have yet to write one for all the groups.] 
+</p>
 
-You are done
-<hr>
-cluster = {{ cluster_id }}
-<hr>
-This is what you chose:<br/>
-{% for logo in chosen_logos %}
-	<img src="{{ url_for('static',filename=logo) }}"/>
-{% endfor%}
-<hr>
+<h2>
+	Logos you chose:<br/>
+</h2>
+<div class="img-container">
+	{% for logo in chosen_logos %}
+		<img src="{{ url_for('static',filename=logo) }}"/>
+	{% endfor%}
+</div>
 
-These are the most similar images:
-<hr>
-{% for logo in closest_logos %}
-	<img src="{{ url_for('static',filename=logo) }}"/>
-{% endfor%}
-<hr>
+<h2>
+	Most similar Logos:
+</h2>
+<div class="img-container">
+	{% for logo in closest_logos %}
+		<img src="{{ url_for('static',filename=logo) }}"/>
+	{% endfor%}
+</div>
 
-Other similar but less simliar images:
-<hr>
-
-{% for logo in cluster_logos %}
-	<img src="{{ url_for('static',filename=logo) }}"/>
-{% endfor%}
-
+<h2>
+	Less simlilar logos:<br/>
+</h2>
+<div class="img-container">
+	{% for logo in cluster_logos %}
+		<img src="{{ url_for('static',filename=logo) }}"/>
+	{% endfor%}
+</div>
+<!--
 logo coord = {{coord}}
+-->
 {% endblock %}

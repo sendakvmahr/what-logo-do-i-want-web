@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask import render_template
 import random
 import clustering.cluster as cluster
+from time import sleep as sleep #lag testing
 #from flask_cors import CORS
 #
 
@@ -16,9 +17,10 @@ exclude_list = [
 4639,	#moka_pot
 633,	#ions
 3891,	#spicy?!
+4567,	#kraft singles
 ]
 
-num_logos_show = 20
+num_logos_show = 15
 num_closest_logos = 5
 num_final = 10
 app = Flask(__name__)
@@ -153,11 +155,8 @@ def start():
 		logos=logos
 	)
 
-# TODO - smarter guesses on which logos should go next after 
 @app.route("/new_images") 
 def get_images():
-	# exclude chosen logos from closest
-	# shuffle the logl
 	exclude = request.args.get('ids').split(",")
 	exclude = [int(x) for x in exclude]
 	count = len(exclude)
@@ -172,4 +171,5 @@ def get_images():
 	else:
 		logos = random_logos(num_logos_show, exclude)
 	random.shuffle(logos)
+	#sleep(5)
 	return jsonify(logos)
