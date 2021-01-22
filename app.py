@@ -14,9 +14,13 @@ exclude_list = [
 1479,	#broughton_foods_company
 1926, 	#killer_shake
 4639,	#moka_pot
+633,	#ions
+3891,	#spicy?!
 ]
+
 num_logos_show = 20
 num_closest_logos = 5
+num_final = 10
 app = Flask(__name__)
 #CORS(app)
 
@@ -27,6 +31,14 @@ def logo_id_to_image(logo_id):
 	category, name = cluster.IDS[logo_id]
 	return "logo_images/{}/{}.webp".format(category, name)
 
+def logo_id_to_json(logo_id):
+	return {
+		"filename": logo_id_to_image(logo_id),
+		"coord": strip_list(cluster.get_logo_arguments(logo_id)),
+		"id": logo_id,
+		"cluster_id": str(cluster.id_to_cluster(logo_id))
+	}
+
 def random_logo(exclude=[]):
 	"""Selects a random logo, excludes some"""
 	if -1 not in exclude:
@@ -35,11 +47,17 @@ def random_logo(exclude=[]):
 	logo_id = -1
 	while logo_id in exclude:
 		logo_id = random.randint(0, cluster.NUM_LOGOS)
-	return {
-		"filename": logo_id_to_image(logo_id),
-		"coord": strip_list(cluster.get_logo_arguments(logo_id)),
-		"id": logo_id
-	}
+	return logo_id_to_json(logo_id)
+
+def random_logos(n, exclude=[]):
+	"""Selects multiple logos without dupelications and with exclusions """
+	result = []
+	for i in range(n):
+		logo = random_logo(exclude)
+		exclude.append(logo["id"])
+		result.append(logo)
+	return result
+
 
 def average_id_coords(ids):
 	ids = [cluster.DATA[i] for i in ids]
@@ -50,16 +68,7 @@ def average_id_coords(ids):
 		total = 0
 		for x in range(rows):
 			total += ids[x][y]
-		result.append(total/rows)
-	return result
-
-def random_logos(n, exclude=[]):
-	"""Selects multiple logos without dupelications and with exclusions """
-	result = []
-	for i in range(n):
-		logo = random_logo(exclude)
-		exclude.append(logo["id"])
-		result.append(logo)
+		result.append(total / rows)
 	return result
 
 def load_cluster_images(cluster_id, exclude=[]):
@@ -71,6 +80,17 @@ def load_cluster_images(cluster_id, exclude=[]):
 		if i not in exclude:
 			result.append(logo_id_to_image(i))
 	return result
+
+def load_closest_logos(coordinate, n, random_choice=True, exclude=[]):
+	exclude += exclude_list
+	close = cluster.closest_logos(coordinate, n*3)
+	for id_ in exclude:
+		if id_ in close:
+			close.remove(id_)
+	if random_choice:
+		random.shuffle(close)
+	close = close[:n]
+	return [logo_id_to_json(i) for i in close]
 
 @app.route("/")
 def index():
@@ -92,11 +112,14 @@ def get_final_url():
 	ids = request.args.get('ids').split(",")
 	ids = [int(i) for i in ids]
 	clusters = [cluster.id_to_cluster(i) for i in ids]
+	clusters = list(clusters)
 	final_average = average_id_coords(ids)
 	final_cluster = -1
+
 	for id_ in clusters:
-		if clusters.count(id_) >= int(len(clusters) * .3):
-			clusters = id_
+		if clusters.count(id_) >= (int(len(clusters) * .3)):
+			final_cluster = id_
+
 	if final_cluster == -1:
 		final_cluster = cluster.predict_coord(final_average)
 	closest_logos = cluster.closest_logos(final_average, 3)
@@ -133,9 +156,20 @@ def start():
 # TODO - smarter guesses on which logos should go next after 
 @app.route("/new_images") 
 def get_images():
+	# exclude chosen logos from closest
+	# shuffle the logl
 	exclude = request.args.get('ids').split(",")
-	# if num f ids > some number, start doing half random, half closest
 	exclude = [int(x) for x in exclude]
 	count = len(exclude)
-	logos = random_logos(num_logos_show, exclude)
+	logos = []
+	if count >= 5: 
+		n_rand = int(num_logos_show / 3)
+		n_close = num_logos_show - n_rand
+		randoms = random_logos(n_rand, exclude)
+		exclude_randoms = [i["id"] for i in randoms] + exclude
+		closest = load_closest_logos(average_id_coords(exclude), n_close, exclude=exclude_randoms)
+		logos = closest + randoms
+	else:
+		logos = random_logos(num_logos_show, exclude)
+	random.shuffle(logos)
 	return jsonify(logos)
