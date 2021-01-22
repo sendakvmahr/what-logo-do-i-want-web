@@ -2,18 +2,21 @@
   --border: #1e90ff00;
   --textcolor: #000000;
   --padding-count: 15px;
-  --bg1: #b3e6cc;
-  --bg2: #ffffe6;
+  --bg1: #708ada;
+  --bg1g: #5e9bbf;
+  --bg2: #eae7e2;
+  --radius: 5px;
 } 
 
 html, body {
 	font-family: 'Lato', sans-serif;
-	background-color: var(--bg1);
+	background: linear-gradient(0deg, var(--bg1) 0%, var(--bg1g) 100%);
 	display: flex;
 	min-height: 100vh;
 	min-width: 100vw;
 	justify-content: center;
 	align-items: center;
+	color: var(--textcolor);
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
@@ -46,7 +49,8 @@ h1, h2, h3, h4, h5, h6 {
 	padding: calc(var(--padding-count)/2) var(--padding-count);
 	text-decoration: none;
 	font-weight: bold;
-	color: var(--text);
+	color: var(--textcolor);
+	border-radius: var(--radius);
 }
 
 #navigation {
@@ -85,12 +89,14 @@ h1, h2, h3, h4, h5, h6 {
 	margin-bottom: 4em;
 	margin-top: 1em;
 	position: relative;
+	box-shadow: 2px 5px 5px #0003;
+	border-radius: var(--radius);
 }
 
 .img-container {
 	z-index: 1;
 	display: grid;
-	grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+	grid-template-columns:1fr 1fr 1fr 1fr;
 	justify-items: center;
 	grid-row-gap: var(--padding-count);
 	grid-column-gap: var(--padding-count);
@@ -99,7 +105,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .img-container img {
 	background: #ffffff;
-	max-width: 100%;
+	max-width: calc(100% - 20px);
+	padding: 10px;
 }
 
 

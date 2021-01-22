@@ -1,10 +1,13 @@
+descriptions of each cluster
 
-# TODO - smarter guesses on which logos should go next after X gueses. or only 
-# if there's enough unity among the things start narrowing it down
+progress bar on clicking
+
+#rate how much unity there is, tell ppl if they dunno what they want by the end of the selection
 
 
-# TODO - descriptions of each cluster
-# todo  - progress bar on clicking
+media queries - is crud on mobile atm, will be easy to scale but it still needs to be done
 
-#rate how much unity there is, tell ppl if they dunno what they want
+toggle logos on and off on results page
+
+copy link to results on end page
 

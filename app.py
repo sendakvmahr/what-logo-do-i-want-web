@@ -18,6 +18,7 @@ exclude_list = [
 633,	#ions
 3891,	#spicy?!
 4567,	#kraft singles
+4203, 	#zain jordan
 ]
 
 num_logos_show = 15
