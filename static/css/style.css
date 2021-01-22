@@ -9,17 +9,19 @@
 } 
 
 html, body {
-	font-family: 'Lato', sans-serif;
+	font-family: 'Source Sans Pro', sans-serif;
 	background: linear-gradient(0deg, var(--bg1) 0%, var(--bg1g) 100%);
 	display: flex;
 	min-height: 100vh;
-	min-width: 100vw;
+	width: 100%;
 	justify-content: center;
 	align-items: center;
 	color: var(--textcolor);
 }
 h1, h2, h3, h4, h5, h6 {
-  font-weight: bold;
+	font-family: 'Lato', sans-serif;
+	letter-spacing: .03em;
+	font-weight: bold;
 }
 
 .transparent {
@@ -45,6 +47,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .button {
+	font-family: 'Lato', sans-serif;
+	letter-spacing: .03em;
 	background-color: var(--bg1);
 	padding: calc(var(--padding-count)/2) var(--padding-count);
 	text-decoration: none;

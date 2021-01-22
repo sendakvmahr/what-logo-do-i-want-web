@@ -7,7 +7,13 @@ progress bar on clicking
 
 media queries - is crud on mobile atm, will be easy to scale but it still needs to be done
 
-toggle logos on and off on results page
-
 copy link to results on end page
 
+css details
+	button/hover
+	navbar prettier
+	loading div do more than just load
+
+toggle logos on and off on results page
+
+the entire process page
